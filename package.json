@@ -8,26 +8,29 @@
     "name": "Aditya Sarode"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/adityassarode/dock"
-},
+    "type": "git",
+    "url": "https://github.com/adityassarode/dock"
+  },
   "icon": "media/dock.png",
-  "keywords": [
-    "project",
-    "workspace",
-    "manager",
-    "bookmark",
-    "switch",
-    "focus",
-    "productivity"
-  ],
+ "keywords": [
+  "dock",
+  "aditya sarode",
+  "folder",
+  "file",
+  "project manager",
+  "project switcher",
+  "workspace",
+  "multi project",
+  "project hub",
+  "bookmark projects",
+  "developer productivity"
+],
   "engines": {
     "vscode": "^1.88.0"
   },
   "categories": [
     "Other"
   ],
-
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -65,16 +68,20 @@
         "title": "Dock: Search Project"
       },
       {
-        "command": "dock.handleProjectClick",
-        "title": "Dock: Handle Project Click"
+        "command": "dock.openInNewWindow",
+        "title": "Open in New Window"
       },
       {
-        "command": "dock.openProject",
-        "title": "Open Project"
+        "command": "dock.openInCurrentWindow",
+        "title": "Open in Current Window"
       },
       {
-        "command": "dock.openFolder",
-        "title": "Open Folder"
+        "command": "dock.addToWorkspace",
+        "title": "Add to Workspace"
+      },
+      {
+        "command": "dock.openInEditor",
+        "title": "Open in Editor"
       },
       {
         "command": "dock.copyPath",
@@ -107,19 +114,30 @@
     ],
     "menus": {
       "explorer/context": [
-  {
-    "command": "dock.registerResource",
-    "group": "navigation@100",
-    "when": "explorerResourceIsFolder || explorerResourceIsFile",
-    "args": ["${resource}"]
-  }
-
+        {
+          "command": "dock.registerResource",
+          "group": "navigation@100",
+          "when": "explorerResourceIsFolder || explorerResourceIsFile",
+          "args": [
+            "${resource}"
+          ]
+        }
       ],
       "view/item/context": [
         {
-          "command": "dock.openProject",
+          "command": "dock.openInNewWindow",
           "when": "view == dock.projectsView && viewItem == dockProject",
           "group": "navigation@1"
+        },
+        {
+          "command": "dock.openInCurrentWindow",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "navigation@2"
+        },
+        {
+          "command": "dock.addToWorkspace",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "navigation@3"
         },
         {
           "command": "dock.copyPath",
@@ -137,9 +155,19 @@
           "group": "2_danger@2"
         },
         {
-          "command": "dock.openFolder",
+          "command": "dock.openInNewWindow",
           "when": "view == dock.projectsView && viewItem == dockFolder",
           "group": "navigation@1"
+        },
+        {
+          "command": "dock.openInCurrentWindow",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "navigation@2"
+        },
+        {
+          "command": "dock.addToWorkspace",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "navigation@3"
         },
         {
           "command": "dock.rename",
@@ -167,7 +195,7 @@
           "group": "2_danger@1"
         },
         {
-          "command": "vscode.open",
+          "command": "dock.openInEditor",
           "when": "view == dock.projectsView && viewItem == dockFile",
           "group": "navigation@1"
         },

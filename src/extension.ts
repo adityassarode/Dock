@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { registerFileTracking } from "./fileWatcher";
 import { ProjectManager } from "./projectManager";
-import { DockTreeProvider, DockTreeNode, isProjectNode } from "./treeProvider";
+import { DockTreeProvider, DockTreeNode } from "./treeProvider";
 
 export function activate(context: vscode.ExtensionContext): void {
   console.log("Dock Activated");
@@ -21,9 +21,6 @@ export function activate(context: vscode.ExtensionContext): void {
 
   treeProvider.bindTreeView(treeView);
 
-  const clickState = new Map<string, number>();
-  const doubleClickThresholdMs = 350;
-
   context.subscriptions.push(
     treeView,
 
@@ -37,13 +34,7 @@ export function activate(context: vscode.ExtensionContext): void {
       await vscode.env.clipboard.writeText(node.resourcePath);
       vscode.window.showInformationMessage("Path copied to clipboard");
     }),
-    vscode.commands.registerCommand("dock.copyPath", async (node) => {
-      if (!node?.resourcePath) return;
 
-      await vscode.env.clipboard.writeText(node.resourcePath);
-      vscode.window.showInformationMessage("Path copied to clipboard");
-    }),
-    
     vscode.commands.registerCommand("dock.openProject", async (node) => {
       if (!node?.resourcePath) return;
 
@@ -57,20 +48,14 @@ export function activate(context: vscode.ExtensionContext): void {
       await openProject(node.resourcePath, mode);
     }),
     vscode.commands.registerCommand(
-  "dock.registerResource",
-  async (uri?: vscode.Uri) => {
-    console.log("REGISTER TRIGGERED", uri);
-    vscode.window.showInformationMessage("Register triggered");
-    await projectManager.registerProject(uri);
-    treeProvider.refresh();
-  }
-),
-    vscode.commands.registerCommand("dock.copyPath", async (node) => {
-      if (!node?.resourcePath) return;
-
-      await vscode.env.clipboard.writeText(node.resourcePath);
-      vscode.window.showInformationMessage("Path copied");
-    }),
+      "dock.registerResource",
+      async (uri?: vscode.Uri) => {
+        console.log("REGISTER TRIGGERED", uri);
+        vscode.window.showInformationMessage("Register triggered");
+        await projectManager.registerProject(uri);
+        treeProvider.refresh();
+      },
+    ),
     vscode.commands.registerCommand("dock.rename", async (node) => {
       if (!node?.resourcePath) return;
 
@@ -139,21 +124,25 @@ export function activate(context: vscode.ExtensionContext): void {
 
       treeProvider.refresh();
     }),
+    vscode.commands.registerCommand("dock.openInNewWindow", async (node) => {
+      if (!node?.resourcePath) return;
+      await openProject(node.resourcePath, "newWindow");
+    }),
     vscode.commands.registerCommand(
-  "dock.openNode",
-  async (resourcePath: string, isDirectory: boolean) => {
-    if (!resourcePath) return;
-
-    const uri = vscode.Uri.file(resourcePath);
-
-    if (isDirectory) {
-      const mode = await projectManager.resolveOpenMode();
-      await openProject(resourcePath, mode);
-    } else {
-      await vscode.window.showTextDocument(uri);
-    }
-  }
-),
+      "dock.openInCurrentWindow",
+      async (node) => {
+        if (!node?.resourcePath) return;
+        await openProject(node.resourcePath, "currentWindow");
+      },
+    ),
+    vscode.commands.registerCommand("dock.addToWorkspace", async (node) => {
+      if (!node?.resourcePath) return;
+      await openProject(node.resourcePath, "addToWorkspace");
+    }),
+    vscode.commands.registerCommand("dock.openInEditor", async (node) => {
+      if (!node?.resourcePath) return;
+      await vscode.window.showTextDocument(vscode.Uri.file(node.resourcePath));
+    }),
     vscode.commands.registerCommand("dock.removeProject", async (node) => {
       if (!node?.project) return;
 
@@ -188,75 +177,6 @@ export function activate(context: vscode.ExtensionContext): void {
 
       treeProvider.refresh();
     }),
-    vscode.commands.registerCommand("dock.rename", async (node) => {
-      if (!node?.resourcePath) return;
-
-      const newName = await vscode.window.showInputBox({
-        prompt: "Enter new name",
-        value: path.basename(node.resourcePath),
-      });
-
-      if (!newName) return;
-
-      const newPath = path.join(path.dirname(node.resourcePath), newName);
-
-      await vscode.workspace.fs.rename(
-        vscode.Uri.file(node.resourcePath),
-        vscode.Uri.file(newPath),
-      );
-
-      treeProvider.refresh();
-    }),
-    vscode.commands.registerCommand("dock.delete", async (node) => {
-      if (!node?.resourcePath) return;
-
-      const confirm = await vscode.window.showWarningMessage(
-        "Are you sure you want to delete this?",
-        { modal: true },
-        "Delete",
-      );
-
-      if (confirm !== "Delete") return;
-
-      await vscode.workspace.fs.delete(vscode.Uri.file(node.resourcePath), {
-        recursive: true,
-      });
-
-      treeProvider.refresh();
-    }),
-    vscode.commands.registerCommand("dock.move", async (node) => {
-      if (!node?.resourcePath) return;
-
-      const target = await vscode.window.showOpenDialog({
-        canSelectFolders: true,
-        canSelectFiles: false,
-        canSelectMany: false,
-        openLabel: "Select destination folder",
-      });
-
-      if (!target) return;
-
-      const newPath = path.join(
-        target[0].fsPath,
-        path.basename(node.resourcePath),
-      );
-
-      await vscode.workspace.fs.rename(
-        vscode.Uri.file(node.resourcePath),
-        vscode.Uri.file(newPath),
-      );
-
-      treeProvider.refresh();
-    }),
-    vscode.commands.registerCommand("dock.revealInExplorer", async (node) => {
-      if (!node?.resourcePath) return;
-
-      await vscode.commands.executeCommand(
-        "revealFileInOS",
-        vscode.Uri.file(node.resourcePath),
-      );
-    }),
-
     vscode.commands.registerCommand("dock.createNewProject", async () => {
       await projectManager.createNewProject();
       treeProvider.refresh();
@@ -268,34 +188,6 @@ export function activate(context: vscode.ExtensionContext): void {
         await openProject(project.path, mode);
       });
     }),
-
-    vscode.commands.registerCommand(
-      "dock.handleProjectClick",
-      async (node: DockTreeNode) => {
-        if (!isProjectNode(node)) return;
-
-        const now = Date.now();
-        const previousClick = clickState.get(node.project.path) ?? 0;
-        clickState.set(node.project.path, now);
-
-        if (now - previousClick <= doubleClickThresholdMs) {
-          clickState.delete(node.project.path);
-          const mode = await projectManager.resolveOpenMode();
-          await openProject(node.project.path, mode);
-          return;
-        }
-
-        await treeProvider.expandProject(node);
-      },
-    ),
-
-    vscode.commands.registerCommand(
-      "dock.openProject",
-      async (projectPath: string) => {
-        const mode = await projectManager.resolveOpenMode();
-        await openProject(projectPath, mode);
-      },
-    ),
   );
 
   registerFileTracking(context, projectManager, treeProvider);

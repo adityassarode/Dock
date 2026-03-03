@@ -30,16 +30,6 @@ export class DockTreeProvider implements vscode.TreeDataProvider<DockTreeNode> {
     this.emitter.fire(undefined);
   }
 
-  public async expandProject(node: ProjectNode): Promise<void> {
-    if (!this.treeView) return;
-
-    await this.treeView.reveal(node, {
-      expand: true,
-      focus: true,
-      select: true,
-    });
-  }
-
   // ----------------------------------
   // Tree Rendering
   // ----------------------------------
@@ -124,12 +114,6 @@ class ProjectNode extends vscode.TreeItem {
     this.contextValue = "dockProject";
     this.resourcePath = project.path;
     this.tooltip = project.path;
-
-    this.command = {
-      command: "dock.openNode",
-      title: "Open",
-      arguments: [this.resourcePath, true],
-    };
   }
 }
 
@@ -152,18 +136,5 @@ class FsNode extends vscode.TreeItem {
     this.contextValue = isDirectory ? "dockFolder" : "dockFile";
 
     this.tooltip = resourcePath;
-
-    this.command = {
-      command: "dock.openNode",
-      title: "Open",
-      arguments: [this.resourcePath, this.isDirectory],
-    };
   }
 }
-
-// =====================================
-// Type Guard
-// =====================================
-
-export const isProjectNode = (node: DockTreeNode): node is ProjectNode =>
-  node instanceof ProjectNode;
