@@ -2,7 +2,7 @@
   "name": "dock",
   "displayName": "Dock",
   "description": "Dock helps you bookmark, manage, and instantly switch between projects in VS Code — designed for developers who value speed and focus.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "adityassarode",
   "author": {
     "name": "Aditya Sarode"
