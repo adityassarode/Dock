@@ -1,12 +1,21 @@
 {
   "name": "dock",
   "displayName": "Dock",
-  "description": "Lightweight project bookmark and focus manager for VS Code.",
+  "description": "Dock helps you bookmark, manage, and instantly switch between projects in VS Code — designed for developers who value speed and focus.",
   "version": "0.1.0",
   "publisher": "adityassarode",
   "author": {
     "name": "Aditya Sarode"
   },
+"keywords": [
+  "project",
+  "workspace",
+  "manager",
+  "bookmark",
+  "switch",
+  "focus",
+  "productivity"
+],
   "engines": {
     "vscode": "^1.88.0"
   },
