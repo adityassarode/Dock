@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { registerFileTracking } from './fileWatcher';
 import { ProjectManager } from './projectManager';
 import { DockTreeProvider, DockTreeNode, isProjectNode } from './treeProvider';
@@ -81,7 +82,7 @@ const openProject = async (
       break;
     case 'addToWorkspace': {
       const current = vscode.workspace.workspaceFolders?.length ?? 0;
-      vscode.workspace.updateWorkspaceFolders(current, 0, { uri, name: uri.path.split('/').pop() || 'Dock Project' });
+      vscode.workspace.updateWorkspaceFolders(current, 0, { uri, name: path.basename(uri.fsPath) || 'Dock Project' });
       break;
     }
   }
