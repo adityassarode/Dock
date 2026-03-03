@@ -128,7 +128,7 @@ Default:
 
 ---
 
-## 🗺 Roadmap – v2.0git  
+## 🗺 Roadmap – v2.0
 
 Planned improvements:
 
