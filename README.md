@@ -128,7 +128,7 @@ Default:
 
 ---
 
-## 🗺 Roadmap – v0.2
+## 🗺 Roadmap – v2.0git  
 
 Planned improvements:
 
@@ -182,25 +182,4 @@ Focused on building tools in AI, ML, and developer productivity.
 
 ---
 
-# 📢 LinkedIn Launch Post (Copy & Paste)
 
-🚀 Just launched my first VS Code extension: Dock
-
-Dock is a lightweight project manager and project switcher built to reduce context switching friction in VS Code.
-
-If you work across multiple repositories like I do, you know the pain of constantly reopening folders.
-
-Dock lets you:
-• Bookmark projects  
-• Expand folder structures  
-• Open in new/current workspace  
-• Manage projects with right-click controls  
-• Persist across sessions  
-
-Built with focus and simplicity in mind.
-
-Would love feedback from developers here 👇
-
-🔗 https://marketplace.visualstudio.com/items?itemName=adityassarode.dock
-
-#VSCode #OpenSource #DeveloperTools #Productivity #BuildInPublic
