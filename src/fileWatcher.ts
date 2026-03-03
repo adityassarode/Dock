@@ -22,15 +22,15 @@ export const registerFileTracking = (
   context.subscriptions.push(
     vscode.workspace.onDidCreateFiles(async (event) => {
       await updateFromUris(event.files);
-      treeProvider.refresh();
+      
     }),
     vscode.workspace.onDidDeleteFiles(async (event) => {
       await updateFromUris(event.files);
-      treeProvider.refresh();
+      
     }),
     vscode.workspace.onDidSaveTextDocument(async (document) => {
       await updateFromUris([document.uri]);
-      treeProvider.refresh();
+      
     })
   );
 };
