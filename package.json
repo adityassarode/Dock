@@ -2,7 +2,7 @@
   "name": "dock",
   "displayName": "Dock",
   "description": "Dock helps you bookmark, manage, and instantly switch between projects in VS Code — designed for developers who value speed and focus.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "adityassarode",
   "author": {
     "name": "Aditya Sarode"
@@ -12,19 +12,19 @@
     "url": "https://github.com/adityassarode/dock"
   },
   "icon": "media/dock.png",
- "keywords": [
-  "dock",
-  "aditya sarode",
-  "folder",
-  "file",
-  "project manager",
-  "project switcher",
-  "workspace",
-  "multi project",
-  "project hub",
-  "bookmark projects",
-  "developer productivity"
-],
+  "keywords": [
+    "dock",
+    "aditya sarode",
+    "folder",
+    "file",
+    "project manager",
+    "project switcher",
+    "workspace",
+    "multi project",
+    "project hub",
+    "bookmark projects",
+    "developer productivity"
+  ],
   "engines": {
     "vscode": "^1.88.0"
   },
