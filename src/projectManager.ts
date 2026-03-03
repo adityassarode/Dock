@@ -2,7 +2,11 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { detectLanguageFromFile, getWorkspaceRoot, isInsidePath } from './utils';
 
-export type DockOpenMode = 'newWindow' | 'currentWindow' | 'ask';
+export type DockOpenMode =
+  | 'newWindow'
+  | 'currentWindow'
+  | 'addToWorkspace'
+  | 'ask';
 
 export interface DockProject {
   name: string;
@@ -64,7 +68,45 @@ export class ProjectManager {
       return;
     }
 
-    const name = customName.trim() || defaultName;
+    let name = customName.trim() || defaultName;
+    const nameConflict = index.projects.find(p => p.name === name);
+
+if (nameConflict && nameConflict.path !== projectRootUri.fsPath) {
+  const action = await vscode.window.showQuickPick(
+    [
+      { label: 'Rename', value: 'rename' },
+      { label: 'Keep as Separate', value: 'separate' },
+      { label: 'Merge with Existing', value: 'merge' },
+      { label: 'Cancel', value: 'cancel' }
+    ],
+    { placeHolder: `Project "${name}" already exists.` }
+  );
+
+  if (!action || action.value === 'cancel') {
+    return;
+  }
+
+  if (action.value === 'rename') {
+    const newName = await vscode.window.showInputBox({
+      prompt: 'Enter new project name'
+    });
+    if (!newName) return;
+    name = newName.trim();
+  }
+
+  if (action.value === 'merge') {
+    nameConflict.languages = Array.from(
+      new Set([...nameConflict.languages, ...languages])
+    );
+    await this.writeIndex(index);
+    vscode.window.showInformationMessage(
+      `Merged into existing project "${nameConflict.name}".`
+    );
+    return;
+  }
+
+  // if separate → continue normally
+}
     const languages = await this.detectLanguagesForFolder(projectRootUri);
 
     const index = await this.readIndex();
