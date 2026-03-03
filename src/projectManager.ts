@@ -22,7 +22,11 @@ interface DockIndex {
 }
 
 export class ProjectManager {
-  private readonly indexRelativePath = ".dock/index.json";
+  constructor(private readonly context: vscode.ExtensionContext) {}
+
+  // -----------------------------
+  // PUBLIC METHODS
+  // -----------------------------
 
   public async getProjects(): Promise<DockProject[]> {
     const index = await this.readIndex();
@@ -54,6 +58,7 @@ export class ProjectManager {
     if (!selectedUri) return;
 
     const stat = await vscode.workspace.fs.stat(selectedUri);
+
     const projectRootUri =
       stat.type === vscode.FileType.File
         ? vscode.Uri.file(path.dirname(selectedUri.fsPath))
@@ -74,7 +79,7 @@ export class ProjectManager {
     const index = await this.readIndex();
     const languages = await this.detectLanguagesForFolder(projectRootUri);
 
-    // 🔹 Handle name conflict
+    // 🔹 Handle name conflict (different path, same name)
     const nameConflict = index.projects.find(
       (p) => p.name === name && p.path !== projectRootUri.fsPath,
     );
@@ -106,6 +111,7 @@ export class ProjectManager {
         ).sort();
 
         await this.writeIndex(index);
+
         vscode.window.showInformationMessage(
           `Merged into existing project "${nameConflict.name}".`,
         );
@@ -114,7 +120,7 @@ export class ProjectManager {
       // if separate → continue
     }
 
-    // 🔹 Check existing path
+    // 🔹 Check if same path already registered
     const existing = index.projects.find(
       (project) => project.path === projectRootUri.fsPath,
     );
@@ -126,6 +132,7 @@ export class ProjectManager {
       ).sort();
 
       await this.writeIndex(index);
+
       vscode.window.showInformationMessage(`Dock updated project: ${name}`);
       return;
     }
@@ -143,6 +150,7 @@ export class ProjectManager {
     index.projects.sort((a, b) => a.name.localeCompare(b.name));
 
     await this.writeIndex(index);
+
     vscode.window.showInformationMessage(`Registered "${name}" in Dock.`);
   }
 
@@ -191,6 +199,7 @@ export class ProjectManager {
     onSelect: (project: DockProject) => Promise<void>,
   ): Promise<void> {
     const projects = await this.getProjects();
+
     if (projects.length === 0) {
       vscode.window.showInformationMessage(
         "No projects are registered in Dock yet.",
@@ -237,24 +246,13 @@ export class ProjectManager {
 
   public async resolveOpenMode(): Promise<DockOpenMode> {
     const configuration = vscode.workspace.getConfiguration("dock");
-    const configured = configuration.get<"newWindow" | "currentWindow" | "ask">(
-      "defaultOpenMode",
-      "ask",
-    );
 
-    if (configured !== "ask") return configured;
-
-    const picked = await vscode.window.showQuickPick(
-      [
-        { label: "New Window", value: "newWindow" as const },
-        { label: "Current Window", value: "currentWindow" as const },
-        { label: "Add to Workspace", value: "addToWorkspace" as const },
-      ],
-      { placeHolder: "Open project in:" },
-    );
-
-    return picked?.value ?? "currentWindow";
+    return configuration.get<DockOpenMode>("defaultOpenMode", "currentWindow");
   }
+
+  // -----------------------------
+  // PRIVATE HELPERS
+  // -----------------------------
 
   private async detectLanguagesForFolder(
     folderUri: vscode.Uri,
@@ -279,35 +277,16 @@ export class ProjectManager {
   }
 
   private async readIndex(): Promise<DockIndex> {
-    const root = getWorkspaceRoot();
-    if (!root) return { projects: [] };
+    const stored = this.context.globalState.get<DockIndex>("dockProjects");
 
-    const indexUri = vscode.Uri.joinPath(root.uri, this.indexRelativePath);
-
-    try {
-      const bytes = await vscode.workspace.fs.readFile(indexUri);
-      const parsed = JSON.parse(
-        Buffer.from(bytes).toString("utf8"),
-      ) as DockIndex;
-
-      return parsed.projects ? parsed : { projects: [] };
-    } catch {
-      return { projects: [] };
-    }
+    return stored ?? { projects: [] };
   }
 
   private async writeIndex(index: DockIndex): Promise<void> {
-    const root = getWorkspaceRoot();
-    if (!root) return;
-
-    const dockDir = vscode.Uri.joinPath(root.uri, ".dock");
-    await vscode.workspace.fs.createDirectory(dockDir);
-
-    const indexUri = vscode.Uri.joinPath(root.uri, this.indexRelativePath);
-
-    await vscode.workspace.fs.writeFile(
-      indexUri,
-      Buffer.from(JSON.stringify(index, null, 2), "utf8"),
-    );
+    await this.context.globalState.update("dockProjects", index);
+  }
+  public async saveProjects(projects: DockProject[]): Promise<void> {
+    await this.context.globalState.update("dockProjects", { projects });
   }
 }
+

@@ -1,96 +1,92 @@
 # 🚀 Dock
 
-**"Dock helps you bookmark, manage, and instantly switch between projects in VS Code — designed for developers who value speed and focus."**
-
-Stop digging through folders.  
-Keep your important projects in one clean dock.
+> **A focused project hub for VS Code.**
+>
+> Dock helps you bookmark, organize, and instantly switch between projects — built for developers who value speed, clarity, and flow.
 
 ---
 
 ## ✨ Why Dock?
 
-VS Code already lets you search files.
+VS Code lets you search files.
 
 Dock solves something different:
 
-> 🧠 Context switching & project clutter.
+> 🧠 Context switching and project clutter.
 
 If you:
 
-- Work on multiple projects
-- Switch between college / freelance / personal repos
-- Forget where projects are located
-- Want a clean, curated project panel
+- Work across multiple repositories  
+- Switch between college / freelance / personal projects  
+- Waste time navigating deep folder trees  
+- Want a clean, curated project launcher  
 
-Dock gives you a focused project hub — inside VS Code.
+Dock gives you a dedicated project panel — inside VS Code.
 
----
-
-## 🖥 Features
-
-- 📌 Register existing folders as projects
-- 🆕 Create new project folders
-- 🧭 Quickly switch between projects
-- 🔎 Search registered projects
-- 📂 Expand project structure inside Dock
-- ⚡ Auto-detect languages
-- 🔄 Auto-update when files are created or saved
-- 🎯 Minimal, distraction-free sidebar
+No noise. No complexity. Just focus.
 
 ---
 
-## 📸 How It Works
+## 🖥 Core Features
+
+### 📌 Project Registration
+Register any folder as a Dock project in seconds.
+
+### 🆕 Create Projects Instantly
+Create new project folders directly from Dock.
+
+### ⚡ Smart Project Switching
+Double-click to open projects using your preferred open mode:
+- `newWindow`
+- `currentWindow`
+- `addToWorkspace`
+
+### 🔎 Powerful Search
+Search by:
+- Project name  
+- Detected languages  
+- Path  
+
+### 📂 Expand Structure
+Browse full folder structure inside Dock — without leaving the panel.
+
+### 🔄 Live Auto Refresh
+Dock automatically updates when:
+- Files are created
+- Folders are renamed
+- Content changes
+- Git pulls happen
+
+### 🛠 Right-Click Controls
+For projects, folders, and files:
+
+- Open  
+- Rename  
+- Move  
+- Copy Path  
+- Reveal in OS Explorer  
+- Remove from Dock  
+- Delete from Disk (with confirmation)
+
+### 🌍 Global Persistence
+Projects stay registered across:
+- VS Code restarts  
+- Multiple windows  
+
+---
+
+## 🖱 How It Works
 
 Dock adds a new icon to the Activity Bar.
 
 Inside Dock:
 
-- Only project names are shown by default
-- Single click → Expand project
-- Double click → Open project (choose mode)
+- Clean list of your projects  
+- Single click → Expand  
+- Double click → Open instantly  
+- Right click → Full control menu  
 
----
-
-## 📦 Register a Project
-
-### 1️⃣ Right Click (Recommended)
-
-- Right click any folder in Explorer
-- Click **Register to Dock**
-
-### 2️⃣ Command Palette
-
-Open Command Palette:
-Dock: Register Existing Folder
-Copy code
-
-You can optionally rename the project during registration.
-
----
-
-## 🆕 Create a New Project
-
-Open Command Palette:
-Dock: Create New Project
-Copy code
-
-Dock creates the folder.  
-You continue working normally in Explorer.
-
----
-
-## 🔎 Search Projects
-
-Open Command Palette:
-Dock: Search Project
-Copy code
-
-Search by:
-
-- Project name
-- Detected languages
-- Path
-- Tags
+Minimal design. Maximum speed.
 
 ---
 
@@ -100,46 +96,61 @@ Search by:
 
 Choose how projects open:
 
-- `ask` (default)
 - `newWindow`
 - `currentWindow`
+- `addToWorkspace`
 
-### `dock.showAuthorHeader`
-
-Show or hide branding in the sidebar header.
+Default: `currentWindow`
 
 ---
 
-## 🧠 Design Philosophy
+## 🎯 Design Philosophy
 
 Dock is intentionally:
 
-- Minimal
-- Lightweight
-- Non-intrusive
-- Not a workspace replacement
-- Not a file manager
+- Minimal  
+- Lightweight  
+- Fast  
+- Non-intrusive  
+- Not a workspace replacement  
+- Not a full file manager  
 
-It’s a **project dock** — nothing more.
+It is a **project dock** — nothing more, nothing less.
 
----
-
-## 🎯 Who Is Dock For?
-
-- Students
-- Freelancers
-- Developers juggling multiple repositories
-- Anyone who wants a cleaner project workflow
+Built for clarity.
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Built For
 
-Built with focus by **Aditya Sarode**
+- Students  
+- Freelancers  
+- Developers managing multiple repositories  
+- Anyone who values structured workflow  
 
 ---
 
-## ⭐ If You Like Dock
+## 💡 Why Developers Love It
 
-Consider starring the repository and sharing feedback.
-Dock is actively improving.
+Because flow matters.
+
+Dock reduces friction between projects so you can:
+
+- Think less about navigation  
+- Think more about building  
+
+---
+
+## ⭐ Support Dock
+
+If Dock improves your workflow:
+
+- ⭐ Star the repository  
+- 📝 Share feedback  
+- 🚀 Recommend to other developers  
+
+Dock is actively evolving — with focus.
+
+---
+
+**Built with intention by Aditya Sarode**

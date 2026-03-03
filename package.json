@@ -7,28 +7,27 @@
   "author": {
     "name": "Aditya Sarode"
   },
-"keywords": [
-  "project",
-  "workspace",
-  "manager",
-  "bookmark",
-  "switch",
-  "focus",
-  "productivity"
-],
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/adityassarode/dock"
+},
+  "icon": "media/dock.png",
+  "keywords": [
+    "project",
+    "workspace",
+    "manager",
+    "bookmark",
+    "switch",
+    "focus",
+    "productivity"
+  ],
   "engines": {
     "vscode": "^1.88.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onView:dock.projectsView",
-    "onCommand:dock.registerExistingFolder",
-    "onCommand:dock.registerResource",
-    "onCommand:dock.createNewProject",
-    "onCommand:dock.searchProject"
-  ],
+
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -71,15 +70,131 @@
       },
       {
         "command": "dock.openProject",
-        "title": "Dock: Open Project"
+        "title": "Open Project"
+      },
+      {
+        "command": "dock.openFolder",
+        "title": "Open Folder"
+      },
+      {
+        "command": "dock.copyPath",
+        "title": "Copy Path"
+      },
+      {
+        "command": "dock.rename",
+        "title": "Rename"
+      },
+      {
+        "command": "dock.move",
+        "title": "Move"
+      },
+      {
+        "command": "dock.revealInExplorer",
+        "title": "Reveal in File Explorer"
+      },
+      {
+        "command": "dock.delete",
+        "title": "Delete"
+      },
+      {
+        "command": "dock.removeProject",
+        "title": "Remove from Dock"
+      },
+      {
+        "command": "dock.deleteFromDisk",
+        "title": "Delete from Disk"
       }
     ],
     "menus": {
       "explorer/context": [
+  {
+    "command": "dock.registerResource",
+    "group": "navigation@100",
+    "when": "explorerResourceIsFolder || explorerResourceIsFile",
+    "args": ["${resource}"]
+  }
+
+      ],
+      "view/item/context": [
         {
-          "command": "dock.registerResource",
-          "group": "navigation@100",
-          "when": "explorerResourceIsFolder || explorerResourceIsFile"
+          "command": "dock.openProject",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dock.copyPath",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "dock.removeProject",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "2_danger@1"
+        },
+        {
+          "command": "dock.deleteFromDisk",
+          "when": "view == dock.projectsView && viewItem == dockProject",
+          "group": "2_danger@2"
+        },
+        {
+          "command": "dock.openFolder",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dock.rename",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "dock.move",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "1_modification@2"
+        },
+        {
+          "command": "dock.copyPath",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "1_modification@3"
+        },
+        {
+          "command": "dock.revealInExplorer",
+          "when": "view == dock.projectsView && viewItem == dockFolder",
+          "group": "1_modification@4"
+        },
+        {
+          "command": "dock.deleteFromDisk",
+          "when": "view == dock.projectsView && (viewItem == dockFolder || viewItem == dockFile)",
+          "group": "2_danger@1"
+        },
+        {
+          "command": "vscode.open",
+          "when": "view == dock.projectsView && viewItem == dockFile",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dock.rename",
+          "when": "view == dock.projectsView && viewItem == dockFile",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "dock.move",
+          "when": "view == dock.projectsView && viewItem == dockFile",
+          "group": "1_modification@2"
+        },
+        {
+          "command": "dock.copyPath",
+          "when": "view == dock.projectsView && viewItem == dockFile",
+          "group": "1_modification@3"
+        },
+        {
+          "command": "dock.revealInExplorer",
+          "when": "view == dock.projectsView && viewItem == dockFile",
+          "group": "1_modification@4"
+        },
+        {
+          "command": "dock.deleteFromDisk",
+          "when": "view == dock.projectsView && (viewItem == dockFolder || viewItem == dockFile)",
+          "group": "2_danger@1"
         }
       ]
     },
@@ -91,9 +206,9 @@
           "enum": [
             "newWindow",
             "currentWindow",
-            "ask"
+            "addToWorkspace"
           ],
-          "default": "ask",
+          "default": "currentWindow",
           "description": "Default behavior when opening a project from Dock."
         },
         "dock.showAuthorHeader": {

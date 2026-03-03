@@ -1,7 +1,7 @@
-<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <!-- Top block (project) -->
-  <rect x="8" y="5" width="8" height="8" rx="2.5"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <!-- Top block -->
+  <rect x="2" y="0.2" width="20" height="19" rx="3"/>
   
   <!-- Dock base -->
-  <rect x="6" y="14.5" width="12" height="2" rx="1"/>
+  <rect x="0.5" y="20.7" width="23" height="3" rx="2"/>
 </svg>
