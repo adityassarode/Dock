@@ -3,7 +3,7 @@
   "displayName": "Dock",
   "description": "Lightweight project bookmark and focus manager for VS Code.",
   "version": "0.1.0",
-  "publisher": "aditya-sarode",
+  "publisher": "adityassarode",
   "author": {
     "name": "Aditya Sarode"
   },
@@ -70,7 +70,7 @@
         {
           "command": "dock.registerResource",
           "group": "navigation@100",
-          "when": "explorerResourceIsFolder || resourceScheme == file"
+          "when": "explorerResourceIsFolder || explorerResourceIsFile"
         }
       ]
     },
