@@ -1,0 +1,107 @@
+{
+  "name": "dock",
+  "displayName": "Dock",
+  "description": "Lightweight project bookmark and focus manager for VS Code.",
+  "version": "0.1.0",
+  "publisher": "aditya-sarode",
+  "author": {
+    "name": "Aditya Sarode"
+  },
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:dock.projectsView",
+    "onCommand:dock.registerExistingFolder",
+    "onCommand:dock.registerResource",
+    "onCommand:dock.createNewProject",
+    "onCommand:dock.searchProject"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dock",
+          "title": "Dock",
+          "icon": "media/dock.svg"
+        }
+      ]
+    },
+    "views": {
+      "dock": [
+        {
+          "id": "dock.projectsView",
+          "name": "Dock – Aditya Sarode"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "dock.registerExistingFolder",
+        "title": "Dock: Register Existing Folder"
+      },
+      {
+        "command": "dock.registerResource",
+        "title": "Register to Dock"
+      },
+      {
+        "command": "dock.createNewProject",
+        "title": "Dock: Create New Project"
+      },
+      {
+        "command": "dock.searchProject",
+        "title": "Dock: Search Project"
+      },
+      {
+        "command": "dock.handleProjectClick",
+        "title": "Dock: Handle Project Click"
+      },
+      {
+        "command": "dock.openProject",
+        "title": "Dock: Open Project"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "dock.registerResource",
+          "group": "navigation@100",
+          "when": "explorerResourceIsFolder || resourceScheme == file"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Dock",
+      "properties": {
+        "dock.defaultOpenMode": {
+          "type": "string",
+          "enum": [
+            "newWindow",
+            "currentWindow",
+            "ask"
+          ],
+          "default": "ask",
+          "description": "Default behavior when opening a project from Dock."
+        },
+        "dock.showAuthorHeader": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Dock author branding in the sidebar description."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.88.0",
+    "typescript": "^5.4.3"
+  }
+}
